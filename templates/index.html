@@ -1,1 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spotify Song Downloader</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Spotify Song Downloader</h1>
 
+    <input type="text" id="url" placeholder="Paste your Spotify song link here" />
+    
+    <button onclick="downloadSong()">Download</button>
+
+    <p id="status-message"></p>
+  </div>
+
+  <script>
+    async function downloadSong() {
+      const url = document.getElementById('url').value;
+      const status = document.getElementById('status-message');
+
+      if (!url.trim()) {
+        status.innerText = "Please enter a valid Spotify URL.";
+        status.style.color = "red";
+        return;
+      }
+
+      status.innerText = "Downloading... Please wait.";
+      status.style.color = "#fff700";
+
+      try {
+        const res = await fetch('/download', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
+
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          status.innerText = "✅ Download complete!";
+          status.style.color = "#00ff99";
+        } else {
+          status.innerText = "❌ " + data.message;
+          status.style.color = "red";
+        }
+      } catch (error) {
+        status.innerText = "❌ Something went wrong!";
+        status.style.color = "red";
+      }
+    }
+  </script>
+</body>
+</html>
