@@ -14,3 +14,6 @@ A Flask web application that lets you download Spotify songs by pasting the song
 - spotdl
 
 ## 🚀 Running Locally
+```bash
+pip install -r requirements.txt
+python app.py
